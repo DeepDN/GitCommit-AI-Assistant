@@ -1,19 +1,19 @@
-# GitCommit AI Assistant 🤖
+# GitCommit AI Assistant
 
-**A privacy-focused local application that intelligently generates Git commit messages**
+**Professional local application for intelligent Git commit message generation**
 
 *Developed by: Deepak Nemade (DN)*
 
-## 🌟 Features
+## Features
 
-- **🔒 Privacy First**: Uses local AI logic (rule-based) - no data sent to external services
-- **🧠 Intelligent Analysis**: Analyzes staged changes, file types, and modification patterns
-- **📝 Smart Messages**: Generates conventional commit messages with proper formatting
-- **⚡ Fast & Lightweight**: No external dependencies or API calls required
-- **🎯 Production Ready**: Comprehensive error handling and logging
-- **🔧 Flexible Usage**: Interactive, auto-commit, and preview modes
+- **Privacy First**: Local processing - no external API calls
+- **Intelligent Analysis**: Analyzes staged changes and file patterns
+- **Professional Messages**: Generates conventional commit format
+- **Git Integration**: Supports GPG signing and signoff options
+- **Production Ready**: Comprehensive error handling and logging
+- **Multiple Modes**: Interactive, auto-commit, and preview modes
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.6+
@@ -21,47 +21,40 @@
 
 ### Installation
 
-1. Clone or download the application:
 ```bash
+git clone https://github.com/DeepDN/GitCommit-AI-Assistant.git
 cd GitCommit-AI-Assistant
-```
-
-2. Make the script executable:
-```bash
-chmod +x main.py
+chmod +x main.py setup.sh
+./setup.sh
 ```
 
 ### Usage
 
-#### Interactive Mode (Recommended)
+#### Basic Usage
 ```bash
-python main.py
+python main.py                    # Interactive mode
+python main.py --auto            # Auto-commit mode
+python main.py --preview         # Preview mode only
 ```
-Analyzes changes and asks for confirmation before committing.
 
-#### Auto-Commit Mode
+#### Advanced Git Options
 ```bash
-python main.py --auto
+python main.py --sign            # GPG sign commit
+python main.py -s                # Add signed-off-by line
+python main.py --auto --sign -s  # Auto-commit with signature and signoff
 ```
-Automatically commits with the generated message.
 
-#### Preview Mode
-```bash
-python main.py --preview
-```
-Shows the generated message without committing.
+## How It Works
 
-## 📋 How It Works
+1. **Repository Detection**: Validates Git repository
+2. **Change Analysis**: Reads staged changes via `git diff --cached`
+3. **Pattern Recognition**: Analyzes file types and modification patterns
+4. **Message Generation**: Creates conventional commit messages
+5. **Commit Execution**: Applies changes with optional signing
 
-1. **🔍 Detection**: Checks if you're in a Git repository
-2. **📊 Analysis**: Reads staged changes using `git diff --cached`
-3. **🧮 Processing**: Analyzes file types, change patterns, and statistics
-4. **🎯 Generation**: Creates intelligent commit messages using local AI logic
-5. **✅ Execution**: Commits changes or provides preview
+## Message Format
 
-## 🎨 Generated Message Format
-
-The application generates conventional commit messages:
+Generated messages follow conventional commit standards:
 
 ```
 type(scope): description
@@ -72,125 +65,122 @@ type(scope): description
 ```
 
 ### Commit Types
-- `feat`: New features or additions
-- `chore`: Updates and modifications
-- `refactor`: Code refactoring or removals
+- `feat`: New features or file additions
+- `chore`: Updates and general maintenance
+- `refactor`: Code restructuring or removals
 
-### Smart Scopes
+### Intelligent Scopes
 - `python`: Python files (.py)
-- `frontend`: JavaScript/TypeScript files (.js, .ts)
-- `docs`: Documentation files (.md)
+- `frontend`: JavaScript/TypeScript (.js, .ts)
+- `docs`: Documentation (.md)
 - `config`: Configuration files (.yml, .yaml)
 - `core`: Other file types
 
-## 📖 Examples
+## Examples
 
 ### Single File Addition
 ```bash
-$ git add new_feature.py
-$ python main.py
+git add feature.py
+python main.py
 ```
-Output: `feat(python): add new_feature implementation`
+Output: `feat(python): add feature implementation`
 
-### Multiple File Update
+### Multiple File Update with Signing
 ```bash
-$ git add *.js
-$ python main.py  
+git add *.js
+python main.py --auto --sign
 ```
-Output: `chore(frontend): update 3 files`
+Output: `chore(frontend): update 3 files` (GPG signed)
 
-### Documentation Changes
+### Documentation with Signoff
 ```bash
-$ git add README.md
-$ python main.py
+git add README.md
+python main.py -s
 ```
-Output: `chore(docs): update README`
+Output: `chore(docs): update README` (with signed-off-by)
 
-## 🛠️ Command Line Options
+## Command Line Options
 
 | Option | Description |
 |--------|-------------|
 | `--auto` | Auto-commit with generated message |
 | `--preview` | Preview message without committing |
+| `--sign` | GPG sign the commit (-S) |
+| `-s, --signoff` | Add signed-off-by line |
 | `--version` | Show version information |
 | `--help` | Show help message |
 
-## 🔧 Advanced Usage
+## Advanced Integration
 
-### Integration with Git Aliases
-Add to your `.gitconfig`:
+### Git Aliases
+Add to `.gitconfig`:
 ```ini
 [alias]
-    ai-commit = !python /path/to/GitCommit-AI-Assistant/main.py
-    ai-preview = !python /path/to/GitCommit-AI-Assistant/main.py --preview
+    ai = !python /path/to/GitCommit-AI-Assistant/main.py
+    ais = !python /path/to/GitCommit-AI-Assistant/main.py --sign
+    aip = !python /path/to/GitCommit-AI-Assistant/main.py --preview
 ```
 
-Usage:
-```bash
-git ai-commit
-git ai-preview
-```
-
-### Shell Integration
-Add to your `.bashrc` or `.zshrc`:
+### Shell Aliases
+Add to `.bashrc` or `.zshrc`:
 ```bash
 alias gai='python /path/to/GitCommit-AI-Assistant/main.py'
+alias gais='python /path/to/GitCommit-AI-Assistant/main.py --sign'
 alias gaip='python /path/to/GitCommit-AI-Assistant/main.py --preview'
 ```
 
-## 🔒 Privacy & Security
+## Security & Privacy
 
-- **100% Local**: No external API calls or data transmission
-- **No Storage**: Doesn't store or cache any of your code
-- **Open Source**: Full transparency in how messages are generated
-- **Secure**: Uses only standard Git commands
+- **100% Local Processing**: No external network calls
+- **No Data Storage**: Doesn't cache or store code
+- **Open Source**: Full transparency in implementation
+- **Secure Git Integration**: Uses standard Git commands only
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
 **"Not in a git repository"**
-- Ensure you're in a Git repository directory
-- Run `git init` if needed
+- Navigate to Git repository directory
+- Initialize with `git init` if needed
 
 **"No staged changes found"**
-- Stage files first: `git add <files>`
-- Check staged files: `git status`
+- Stage files: `git add <files>`
+- Verify with `git status`
 
-**Permission denied**
-- Make script executable: `chmod +x main.py`
-- Check Python installation: `python --version`
+**GPG signing fails**
+- Configure GPG key: `git config user.signingkey <key-id>`
+- Set up GPG agent for key management
 
-## 🤝 Contributing
+## Development
 
-This is a production-ready application developed by Deepak Nemade (DN). 
-
-### Development Setup
-```bash
-git clone <repository>
-cd GitCommit-AI-Assistant
-python main.py --help
+### Project Structure
+```
+GitCommit-AI-Assistant/
+├── main.py           # Core application
+├── README.md         # Documentation
+├── requirements.txt  # Dependencies
+├── setup.sh         # Setup script
+└── .git/            # Git repository
 ```
 
-## 📄 License
+### Contributing
+1. Fork the repository
+2. Create feature branch
+3. Make changes with proper commit messages
+4. Submit pull request
 
-MIT License - Feel free to use and modify for your projects.
+## License
 
-## 👨‍💻 Developer
+MIT License - Open source and free to use.
+
+## Developer
 
 **Deepak Nemade (DN)**
-- Focused on privacy-first development
-- Committed to creating efficient, local-first tools
-- Passionate about developer productivity
+- Professional software developer
+- Focus on developer productivity tools
+- Committed to privacy-first solutions
 
 ---
 
-## 🎯 Why GitCommit AI Assistant?
-
-- **Privacy**: Your code never leaves your machine
-- **Speed**: Instant analysis and generation
-- **Intelligence**: Context-aware message creation
-- **Simplicity**: One command, perfect commits
-- **Reliability**: Production-tested and robust
-
-**Start writing better commit messages today! 🚀**
+**Professional Git workflow enhancement for modern development teams.**

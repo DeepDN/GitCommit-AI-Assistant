@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
 GitCommit AI Assistant
-A local application that reads staged Git changes and uses a local AI model 
-to generate intelligent commit message summaries.
+A professional local application that reads staged Git changes and uses 
+intelligent analysis to generate conventional commit message summaries.
 
 Developed by: Deepak Nemade (DN)
-Version: 1.0.0
+Version: 2.0.0
+License: MIT
 """
 
 import subprocess
@@ -15,18 +16,20 @@ import argparse
 from pathlib import Path
 from typing import Optional, Dict, List
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class GitCommitAI:
-    """Main class for Git Commit AI Assistant"""
+    """Professional Git Commit AI Assistant"""
     
     def __init__(self):
         self.app_name = "GitCommit AI Assistant"
-        self.version = "1.0.0"
+        self.version = "2.0.0"
         self.developer = "Deepak Nemade (DN)"
+        self.license = "MIT"
         
     def check_git_repo(self) -> bool:
         """Check if current directory is a git repository"""
@@ -146,86 +149,122 @@ class GitCommitAI:
         
         return commit_message + body
     
-    def commit_changes(self, message: str) -> bool:
-        """Commit changes with generated message"""
+    def commit_changes(self, message: str, sign: bool = False, signoff: bool = False) -> bool:
+        """Commit changes with generated message and optional signing"""
         try:
-            subprocess.run(['git', 'commit', '-m', message], check=True)
+            cmd = ['git', 'commit']
+            
+            # Add signing options
+            if sign:
+                cmd.append('-S')
+            if signoff:
+                cmd.append('-s')
+            
+            cmd.extend(['-m', message])
+            
+            subprocess.run(cmd, check=True)
             return True
         except subprocess.CalledProcessError as e:
             logger.error(f"Error committing changes: {e}")
             return False
     
-    def run(self, auto_commit: bool = False, preview_only: bool = False):
+    def run(self, auto_commit: bool = False, preview_only: bool = False, sign: bool = False, signoff: bool = False):
         """Main execution method"""
-        print(f"\n🤖 {self.app_name} v{self.version}")
-        print(f"👨‍💻 Developed by: {self.developer}")
-        print("=" * 50)
+        print(f"\n{self.app_name} v{self.version}")
+        print(f"Developed by: {self.developer}")
+        print(f"License: {self.license}")
+        print("=" * 60)
         
         # Check if in git repo
         if not self.check_git_repo():
-            print("❌ Error: Not in a git repository")
+            print("ERROR: Not in a git repository")
+            print("Please navigate to a git repository or run 'git init'")
             sys.exit(1)
         
         # Get staged changes
-        print("📋 Analyzing staged changes...")
+        print("Analyzing staged changes...")
         diff_content = self.get_staged_changes()
         
         if not diff_content or not diff_content.strip():
-            print("⚠️  No staged changes found. Use 'git add' to stage files first.")
+            print("WARNING: No staged changes found")
+            print("Use 'git add <files>' to stage files before generating commit messages")
             sys.exit(1)
         
         # Get staged files
         staged_files = self.get_staged_files()
-        print(f"📁 Found {len(staged_files)} staged file(s)")
+        print(f"Staged files: {len(staged_files)}")
         
         # Analyze changes
         analysis = self.analyze_changes(diff_content, staged_files)
         
         # Generate commit message
-        print("🧠 Generating intelligent commit message...")
+        print("Generating intelligent commit message...")
         commit_message = self.generate_commit_message(analysis, diff_content)
         
         # Display results
-        print("\n📝 Generated Commit Message:")
-        print("-" * 30)
+        print("\nGenerated Commit Message:")
+        print("-" * 40)
         print(commit_message)
-        print("-" * 30)
+        print("-" * 40)
+        
+        # Show commit options
+        if sign or signoff:
+            options = []
+            if sign:
+                options.append("GPG signed")
+            if signoff:
+                options.append("signed-off")
+            print(f"Commit options: {', '.join(options)}")
         
         if preview_only:
-            print("\n👀 Preview mode - no commit made")
+            print("\nPreview mode - no commit executed")
             return
         
         # Commit or ask for confirmation
         if auto_commit:
-            if self.commit_changes(commit_message):
-                print("\n✅ Changes committed successfully!")
+            if self.commit_changes(commit_message, sign, signoff):
+                print("\nSUCCESS: Changes committed successfully")
             else:
-                print("\n❌ Failed to commit changes")
+                print("\nERROR: Failed to commit changes")
         else:
-            response = input("\n❓ Commit with this message? (y/n/e for edit): ").lower()
+            print("\nOptions:")
+            print("  y - Commit with generated message")
+            print("  e - Edit message in git editor")
+            print("  n - Cancel commit")
+            
+            response = input("\nChoose option (y/e/n): ").lower().strip()
+            
             if response == 'y':
-                if self.commit_changes(commit_message):
-                    print("\n✅ Changes committed successfully!")
+                if self.commit_changes(commit_message, sign, signoff):
+                    print("\nSUCCESS: Changes committed successfully")
                 else:
-                    print("\n❌ Failed to commit changes")
+                    print("\nERROR: Failed to commit changes")
             elif response == 'e':
-                print("\n✏️  Edit mode - opening git commit editor...")
-                subprocess.run(['git', 'commit'])
+                print("\nOpening git commit editor...")
+                cmd = ['git', 'commit']
+                if sign:
+                    cmd.append('-S')
+                if signoff:
+                    cmd.append('-s')
+                subprocess.run(cmd)
             else:
-                print("\n🚫 Commit cancelled")
+                print("\nCommit cancelled")
 
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description="GitCommit AI Assistant - Generate intelligent commit messages",
+        description="GitCommit AI Assistant - Professional commit message generation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   python main.py                    # Interactive mode
   python main.py --auto            # Auto-commit with generated message
   python main.py --preview         # Preview message only
+  python main.py --sign            # GPG sign the commit
+  python main.py --signoff         # Add signed-off-by line
+  python main.py --auto --sign -s  # Auto-commit with GPG signature and signoff
   
-Developed by: Deepak Nemade (DN)
+Professional Git workflow integration by Deepak Nemade (DN)
         """
     )
     
@@ -233,18 +272,24 @@ Developed by: Deepak Nemade (DN)
                        help='Automatically commit with generated message')
     parser.add_argument('--preview', action='store_true',
                        help='Preview generated message without committing')
-    parser.add_argument('--version', action='version', version='GitCommit AI Assistant 1.0.0')
+    parser.add_argument('--sign', action='store_true',
+                       help='GPG sign the commit (equivalent to git commit -S)')
+    parser.add_argument('-s', '--signoff', action='store_true',
+                       help='Add signed-off-by line (equivalent to git commit -s)')
+    parser.add_argument('--version', action='version', version='GitCommit AI Assistant 2.0.0')
     
     args = parser.parse_args()
     
     try:
         app = GitCommitAI()
-        app.run(auto_commit=args.auto, preview_only=args.preview)
+        app.run(auto_commit=args.auto, preview_only=args.preview, 
+                sign=args.sign, signoff=args.signoff)
     except KeyboardInterrupt:
-        print("\n\n🛑 Operation cancelled by user")
+        print("\n\nOperation cancelled by user")
         sys.exit(0)
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
+        print(f"FATAL ERROR: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
