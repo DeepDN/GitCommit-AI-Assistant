@@ -1,0 +1,19 @@
+# GitCommit AI Assistant - Requirements
+# Developed by: Deepak Nemade (DN)
+
+# No external dependencies required!
+# This application uses only Python standard library modules:
+# - subprocess (for Git commands)
+# - sys (for system operations)
+# - json (for data handling)
+# - argparse (for CLI arguments)
+# - pathlib (for file path operations)
+# - typing (for type hints)
+# - logging (for application logging)
+
+# Minimum Python version: 3.6+
+# Recommended Python version: 3.8+
+
+# System requirements:
+# - Git (any recent version)
+# - Unix-like system (Linux, macOS) or Windows with Git Bash
