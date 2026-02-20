@@ -7,11 +7,10 @@
 ## Features
 
 - **Privacy First**: Local processing - no external API calls
+- **Auto-Detection**: Automatically generates messages for all `git commit` commands
 - **Intelligent Analysis**: Analyzes staged changes and file patterns
 - **Professional Messages**: Generates conventional commit format
 - **Git Integration**: Supports GPG signing and signoff options
-- **Production Ready**: Comprehensive error handling and logging
-- **Multiple Modes**: Interactive, auto-commit, and preview modes
 
 ## Quick Start
 
@@ -20,37 +19,22 @@
 - Git repository
 
 ### Installation
-
 ```bash
 git clone https://github.com/DeepDN/GitCommit-AI-Assistant.git
 cd GitCommit-AI-Assistant
-chmod +x main.py setup.sh
-./setup.sh
+python3 install.py
 ```
 
-### Usage
-
-#### Basic Usage
-```bash
-python main.py                    # Interactive mode
-python main.py --auto            # Auto-commit mode
-python main.py --preview         # Preview mode only
-```
-
-#### Advanced Git Options
-```bash
-python main.py --sign            # GPG sign commit
-python main.py -s                # Add signed-off-by line
-python main.py --auto --sign -s  # Auto-commit with signature and signoff
-```
+**That's it!** After installation, the AI assistant automatically generates commit messages for all `git commit` commands. No need to run the application manually.
 
 ## How It Works
 
-1. **Repository Detection**: Validates Git repository
-2. **Change Analysis**: Reads staged changes via `git diff --cached`
-3. **Pattern Recognition**: Analyzes file types and modification patterns
-4. **Message Generation**: Creates conventional commit messages
-5. **Commit Execution**: Applies changes with optional signing
+After installation, the AI assistant integrates with Git hooks to automatically:
+
+1. **Detect Commits**: Triggers on every `git commit` command
+2. **Analyze Changes**: Reads staged changes via `git diff --cached`
+3. **Generate Messages**: Creates conventional commit format messages
+4. **Apply Commit**: Executes with your original Git options (signing, signoff, etc.)
 
 ## Message Format
 
@@ -58,10 +42,6 @@ Generated messages follow conventional commit standards:
 
 ```
 type(scope): description
-
-- Files changed: X
-- Lines added: Y  
-- Lines removed: Z
 ```
 
 ### Commit Types
@@ -76,57 +56,19 @@ type(scope): description
 - `config`: Configuration files (.yml, .yaml)
 - `core`: Other file types
 
-## Examples
+## Usage Examples
 
-### Single File Addition
+After installation, just use normal Git commands:
+
 ```bash
 git add feature.py
-python main.py
-```
-Output: `feat(python): add feature implementation`
+git commit                    # Auto-generates: feat(python): add feature implementation
 
-### Multiple File Update with Signing
-```bash
-git add *.js
-python main.py --auto --sign
-```
-Output: `chore(frontend): update 3 files` (GPG signed)
+git add *.js  
+git commit -S                 # Auto-generates with GPG signing
 
-### Documentation with Signoff
-```bash
 git add README.md
-python main.py -s
-```
-Output: `chore(docs): update README` (with signed-off-by)
-
-## Command Line Options
-
-| Option | Description |
-|--------|-------------|
-| `--auto` | Auto-commit with generated message |
-| `--preview` | Preview message without committing |
-| `--sign` | GPG sign the commit (-S) |
-| `-s, --signoff` | Add signed-off-by line |
-| `--version` | Show version information |
-| `--help` | Show help message |
-
-## Advanced Integration
-
-### Git Aliases
-Add to `.gitconfig`:
-```ini
-[alias]
-    ai = !python /path/to/GitCommit-AI-Assistant/main.py
-    ais = !python /path/to/GitCommit-AI-Assistant/main.py --sign
-    aip = !python /path/to/GitCommit-AI-Assistant/main.py --preview
-```
-
-### Shell Aliases
-Add to `.bashrc` or `.zshrc`:
-```bash
-alias gai='python /path/to/GitCommit-AI-Assistant/main.py'
-alias gais='python /path/to/GitCommit-AI-Assistant/main.py --sign'
-alias gaip='python /path/to/GitCommit-AI-Assistant/main.py --preview'
+git commit -s                 # Auto-generates with signed-off-by
 ```
 
 ## Security & Privacy
@@ -151,24 +93,6 @@ alias gaip='python /path/to/GitCommit-AI-Assistant/main.py --preview'
 **GPG signing fails**
 - Configure GPG key: `git config user.signingkey <key-id>`
 - Set up GPG agent for key management
-
-## Development
-
-### Project Structure
-```
-GitCommit-AI-Assistant/
-├── main.py           # Core application
-├── README.md         # Documentation
-├── requirements.txt  # Dependencies
-├── setup.sh         # Setup script
-└── .git/            # Git repository
-```
-
-### Contributing
-1. Fork the repository
-2. Create feature branch
-3. Make changes with proper commit messages
-4. Submit pull request
 
 ## License
 
